@@ -67,6 +67,21 @@ var/list/disciples = list()
 		eotp.addObservation(50)
 	return TRUE
 
+/obj/item/weapon/implant/core_implant/cruciform/examine(var/mob/user/) // Tells NT members and ghosts whether or not a cruciform can be cloned
+	..()
+	var/datum/core_module/cruciform/cloning/M = get_module(CRUCIFORM_CLONING)
+	var/client/C = get_client_by_ckey(M.ckey)
+	if(isghost(C.mob)) // this is the only check that is needed, because the cruciform has a deathgrip on your ckey even if you become a drone/mouse/whatever, and there is no ghost for disconnected players
+		if(ishuman(user) && user in disciples) // only active cruciform holders and ghosts are allowed to know
+			to_chat(user, SPAN_NOTICE("This one deeply resonates with your core. The soul within this cruciform is active."))
+		if(isghost(user))
+			to_chat(user, SPAN_NOTICE("This cruciform's soul is available for cloning."))
+	else if(M) // the module doesn't exist if the cruciform hasn't been activated
+		if(ishuman(user) && user in disciples)
+			to_chat(user, SPAN_WARNING("This one is faint and unresponsive; the soul within lies dormant for now. Perhaps it might become more active later..."))
+		if(isghost(user))
+			to_chat(user, SPAN_WARNING("This cruciform has a soul, but is not available for cloning."))
+	return
 
 /obj/item/weapon/implant/core_implant/cruciform/deactivate()
 	if(!active || !wearer)
