@@ -81,7 +81,6 @@ var/list/disciples = list()
 			to_chat(user, SPAN_WARNING("This one is faint and unresponsive; the soul within lies dormant for now. Perhaps it might become more active later..."))
 		if(isghost(user))
 			to_chat(user, SPAN_WARNING("This cruciform has a soul, but is not available for cloning."))
-	return
 
 /obj/item/weapon/implant/core_implant/cruciform/deactivate()
 	if(!active || !wearer)
